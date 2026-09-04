@@ -1,0 +1,25 @@
+name: Sync SharePoint List to index.html
+
+on:
+  schedule:
+    - cron: '0 17 * * *' # Läuft täglich automatisch um 17:00 Uhr
+  workflow_dispatch: # Erlaubt manuelles Ausführen per Klick
+
+jobs:
+  update-html:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Fetch Latest Entry from SharePoint
+        run: |
+          echo "Hole Daten aus Microsoft Lists..."
+
+      - name: Commit and Push
+        run: |
+          git config --global user.name "GitHub Action Bot"
+          git config --global user.email "action@github.com"
+          git add index.html
+          git commit -m "Auto-Update Berichtsheft aus SharePoint" || exit 0
+          git push
